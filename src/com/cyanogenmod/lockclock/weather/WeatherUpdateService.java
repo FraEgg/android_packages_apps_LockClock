@@ -29,8 +29,6 @@ import android.location.LocationProvider;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.os.PowerManager;
-import android.os.PowerManager.WakeLock;
 import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Log;
@@ -155,14 +153,10 @@ public class WeatherUpdateService extends Service {
     }
 
     private class WeatherUpdateTask extends AsyncTask<Void, Void, WeatherInfo> {
-        private WakeLock mWakeLock;
         private Context mContext;
 
         public WeatherUpdateTask() {
             if (D) Log.d(TAG, "Starting weather update task");
-            PowerManager pm = (PowerManager) getSystemService(POWER_SERVICE);
-            mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, TAG);
-            mWakeLock.setReferenceCounted(false);
             mContext = WeatherUpdateService.this;
         }
 
@@ -281,8 +275,6 @@ public class WeatherUpdateService extends Service {
             finishedIntent.putExtra(EXTRA_UPDATE_CANCELLED, result == null);
             sendBroadcast(finishedIntent);
 
-            if (D) Log.d(TAG, "RELEASING WAKELOCK");
-            mWakeLock.release();
             stopSelf();
         }
     }
