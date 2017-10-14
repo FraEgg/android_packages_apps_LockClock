@@ -163,7 +163,6 @@ public class WeatherUpdateService extends Service {
         @Override
         protected void onPreExecute() {
             if (D) Log.d(TAG, "ACQUIRING WAKELOCK");
-            mWakeLock.acquire();
         }
 
         private Location getCurrentLocation() {
